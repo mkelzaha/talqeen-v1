@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Availability } from '../calendar/availability.entity';
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -23,4 +24,7 @@ export class User {
     default: UserRole.STUDENT,
   })
   role: UserRole;
+
+  @OneToMany(() => Availability, (availability) => availability.instructor)
+  availabilities: Availability[];
 }
