@@ -18,4 +18,14 @@ export class UserService {
     const newUser = this.usersRepository.create(user);
     return this.usersRepository.save(newUser);
   }
+
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.find();
+  }
+
+  async makeInstructor(id: number): Promise<User> {
+    const user = await this.usersRepository.findOneBy({ id });
+    user.role = 'instructor';
+    return this.usersRepository.save(user);
+  }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../lib/api';
 
 interface Service {
@@ -54,9 +55,12 @@ const Services: React.FC = () => {
               <p className="mt-4 text-3xl font-bold text-gray-900">
                 ${service.price}
               </p>
-              <button className="mt-6 w-full px-4 py-2 text-lg font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">
+              <Link
+                to="/instructor/1/calendar"
+                className="mt-6 block w-full text-center px-4 py-2 text-lg font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              >
                 Book Now
-              </button>
+              </Link>
             </div>
           </div>
         ))}
