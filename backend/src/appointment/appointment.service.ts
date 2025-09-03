@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Appointment } from './appointment.entity';
@@ -15,8 +15,12 @@ export class AppointmentService {
     return this.appointmentsRepository.find({ relations: ['student', 'instructor', 'service'] });
   }
 
-  findOne(id: number): Promise<Appointment> {
-    return this.appointmentsRepository.findOne({ where: { id }, relations: ['student', 'instructor', 'service'] });
+  async findOne(id: number): Promise<Appointment> {
+    const appointment = await this.appointmentsRepository.findOne({ where: { id }, relations: ['student', 'instructor', 'service'] });
+    if (!appointment) {
+      throw new NotFoundException('Appointment not found');
+    }
+    return appointment;
   }
 
   create(createAppointmentDto: CreateAppointmentDto): Promise<Appointment> {

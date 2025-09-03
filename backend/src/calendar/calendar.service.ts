@@ -28,7 +28,7 @@ export class CalendarService {
       where: { instructorId },
     });
 
-    const availableSlots = [];
+    const availableSlots: { startTime: Date; endTime: Date }[] = [];
 
     availabilities.forEach((availability) => {
       const potentialSlots = eachMinuteOfInterval(
