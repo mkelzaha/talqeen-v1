@@ -8,8 +8,9 @@ import {
   isWithinInterval,
   eachMinuteOfInterval,
 } from 'date-fns';
- 
+
 const SLOT_DURATION_MINUTES = 30;
+
 @Injectable()
 export class CalendarService {
   constructor(
@@ -27,8 +28,7 @@ export class CalendarService {
       where: { instructorId },
     });
 
-    const availableSlots: { startTime: Date; endTime: Date }[] = [];
-    const slotDuration = 30;
+    const availableSlots = [];
 
     availabilities.forEach((availability) => {
       const potentialSlots = eachMinuteOfInterval(
@@ -41,8 +41,6 @@ export class CalendarService {
 
       potentialSlots.forEach((slotStartTime) => {
         const slotEndTime = addMinutes(slotStartTime, SLOT_DURATION_MINUTES);
-        { step: slotDuration },
-      );
 
         if (slotEndTime > new Date(availability.endTime)) {
           return;

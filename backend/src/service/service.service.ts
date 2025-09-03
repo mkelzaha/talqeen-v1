@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Service } from './service.entity';
@@ -16,12 +16,8 @@ export class ServiceService {
     return this.servicesRepository.find();
   }
 
-  async findOne(id: number): Promise<Service> {
-    const service = await this.servicesRepository.findOneBy({ id });
-    if (!service) {
-      throw new NotFoundException('Service not found');
-    }
-    return service;
+  findOne(id: number): Promise<Service> {
+    return this.servicesRepository.findOneBy({ id });
   }
 
   create(createServiceDto: CreateServiceDto): Promise<Service> {
