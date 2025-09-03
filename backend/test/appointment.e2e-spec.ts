@@ -46,11 +46,14 @@ describe('AppointmentController (e2e)', () => {
     service = await serviceRepository.save({ name: 'Tajweed Lesson', description: 'A lesson in Tajweed', price: 50 });
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     const connection = getConnection();
     await connection.getRepository(User).clear();
     await connection.getRepository(Service).clear();
     await connection.getRepository(Appointment).clear();
+  });
+
+  afterAll(async () => {
     await app.close();
   });
 
@@ -90,5 +93,52 @@ describe('AppointmentController (e2e)', () => {
       .then((res) => {
         expect(res.body.length).toBe(1);
       });
+  });
+
+  describe('with a created appointment', () => {
+    let appointment: Appointment;
+
+    beforeEach(async () => {
+      const startTime = new Date();
+      const endTime = new Date(startTime.getTime() + 30 * 60000);
+      const res = await request(app.getHttpServer())
+        .post('/appointment')
+        .set('Authorization', `Bearer ${studentToken}`)
+        .send({
+          instructorId: instructor.id,
+          serviceId: service.id,
+          startTime: startTime.toISOString(),
+          endTime: endTime.toISOString(),
+        });
+      appointment = res.body;
+    });
+
+    it('/appointment/:id (GET) - student should get their own appointment', () => {
+      return request(app.getHttpServer())
+        .get(`/appointment/${appointment.id}`)
+        .set('Authorization', `Bearer ${studentToken}`)
+        .expect(200);
+    });
+
+    it('/appointment/:id (GET) - student should not get another student\'s appointment', () => {
+      return request(app.getHttpServer())
+        .get(`/appointment/${appointment.id}`)
+        .set('Authorization', `Bearer ${student2Token}`)
+        .expect(403);
+    });
+
+    it('/appointment/:id (DELETE) - student should delete their own appointment', () => {
+      return request(app.getHttpServer())
+        .delete(`/appointment/${appointment.id}`)
+        .set('Authorization', `Bearer ${studentToken}`)
+        .expect(200);
+    });
+
+    it('/appointment/:id (DELETE) - student should not delete another student\'s appointment', () => {
+      return request(app.getHttpServer())
+        .delete(`/appointment/${appointment.id}`)
+        .set('Authorization', `Bearer ${student2Token}`)
+        .expect(403);
+    });
   });
 });

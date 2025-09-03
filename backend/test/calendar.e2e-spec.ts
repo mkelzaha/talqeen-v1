@@ -63,12 +63,15 @@ describe('CalendarController (e2e)', () => {
     });
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     const connection = getConnection();
     await connection.getRepository(User).clear();
     await connection.getRepository(Service).clear();
     await connection.getRepository(Appointment).clear();
     await connection.getRepository(Availability).clear();
+  });
+
+  afterAll(async () => {
     await app.close();
   });
 
@@ -79,7 +82,12 @@ describe('CalendarController (e2e)', () => {
       .expect(200)
       .then((res) => {
         expect(Array.isArray(res.body)).toBe(true);
-        // A more detailed test would check the actual time slots
+        const bookedSlotStartTime = new Date();
+        bookedSlotStartTime.setHours(10, 0, 0, 0);
+        const isBookedSlotPresent = res.body.some(
+          (slot) => new Date(slot.startTime).getTime() === bookedSlotStartTime.getTime(),
+        );
+        expect(isBookedSlotPresent).toBe(false);
       });
   });
 });

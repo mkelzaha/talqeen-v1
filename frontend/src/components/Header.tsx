@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <header className="bg-white shadow-md">
@@ -27,18 +29,37 @@ const Header: React.FC = () => {
               >
                 Services
               </Link>
-              <Link
-                to="/login"
-                className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium"
-              >
-                Register
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    to="/profile"
+                    className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="bg-blue-500 text-white px-3 py-2 rounded-md text-sm font-medium"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
           </nav>
           <div className="-mr-2 flex md:hidden">
@@ -103,18 +124,37 @@ const Header: React.FC = () => {
             >
               Services
             </Link>
-            <Link
-              to="/login"
-              className="text-gray-500 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="bg-blue-500 text-white block px-3 py-2 rounded-md text-base font-medium"
-            >
-              Register
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  to="/profile"
+                  className="text-gray-500 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Profile
+                </Link>
+                <button
+                  onClick={logout}
+                  className="w-full text-left text-gray-500 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-gray-500 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-blue-500 text-white block px-3 py-2 rounded-md text-base font-medium"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}

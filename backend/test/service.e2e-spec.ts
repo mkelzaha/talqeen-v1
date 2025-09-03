@@ -36,10 +36,13 @@ describe('ServiceController (e2e)', () => {
     studentToken = (await authService.login(student)).access_token;
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     const connection = getConnection();
     await connection.getRepository(User).clear();
     await connection.getRepository(Service).clear();
+  });
+
+  afterAll(async () => {
     await app.close();
   });
 
