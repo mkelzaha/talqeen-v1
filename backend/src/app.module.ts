@@ -13,6 +13,7 @@ import { Appointment } from './appointment/appointment.entity';
 import { AppointmentModule } from './appointment/appointment.module';
 import { Availability } from './calendar/availability.entity';
 import { CalendarModule } from './calendar/calendar.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { CalendarModule } from './calendar/calendar.module';
     ServiceModule,
     AppointmentModule,
     CalendarModule,
+    PaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
